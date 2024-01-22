@@ -1,5 +1,7 @@
 package fr.efrei.documentapi.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.efrei.documentapi.services.FileManipulationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.core.io.Resource;
@@ -47,5 +49,15 @@ public class FileManipulationController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
 
+    }
+
+    @GetMapping("/listFiles")
+    public ResponseEntity<String> listFiles() throws JsonProcessingException {
+        var files = fileManipulationService.listAllFiles();
+
+        ObjectMapper mapper = new ObjectMapper();
+        String filesStr = mapper.writeValueAsString(files);
+
+        return ResponseEntity.ok().body(filesStr);
     }
 }

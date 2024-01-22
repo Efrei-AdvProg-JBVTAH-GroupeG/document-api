@@ -15,6 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FileManipulationServiceImpl implements FileManipulationService{
@@ -35,7 +36,14 @@ public class FileManipulationServiceImpl implements FileManipulationService{
 
     @Override
     public List<String> listAllFiles() {
-        return null;
+        try {
+            return Files.walk(this.fileStorageLocation)
+                    .filter(Files::isRegularFile)
+                    .map(path -> path.getFileName().toString())
+                    .collect(Collectors.toList());
+        } catch (IOException ex) {
+            throw new FileStorageException("Failed to read stored files", ex);
+        }
     }
 
     @Override
