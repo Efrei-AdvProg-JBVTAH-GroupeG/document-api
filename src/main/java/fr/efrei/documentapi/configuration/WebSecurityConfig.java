@@ -50,6 +50,13 @@ public class WebSecurityConfig {
                                     HttpMethod.DELETE,
                                     "/deleteFile/*"
                             ).hasRole("STUDENT")
+                            .requestMatchers(
+                                    HttpMethod.GET,
+                                    "/swagger-ui.html",
+                                    "/swagger-ui/*",
+                                    "/api-docs/swagger-config",
+                                    "/api-docs"
+                            ).permitAll()
                 )
                 .cors(Customizer.withDefaults())
                 //csrf protection not needed as token base application
