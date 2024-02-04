@@ -1,4 +1,4 @@
-package fr.efrei.documentapi.exceptions;
+package fr.efrei.documentapi.exception;
 
 public class FileStorageException extends RuntimeException {
 

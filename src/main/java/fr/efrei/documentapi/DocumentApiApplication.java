@@ -1,6 +1,6 @@
 package fr.efrei.documentapi;
 
-import fr.efrei.documentapi.configurations.FileStorageProperties;
+import fr.efrei.documentapi.configuration.FileStorageProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

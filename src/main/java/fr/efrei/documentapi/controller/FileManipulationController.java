@@ -1,8 +1,10 @@
-package fr.efrei.documentapi.controllers;
+package fr.efrei.documentapi.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.efrei.documentapi.services.FileManipulationService;
+import fr.efrei.documentapi.model.dto.DocumentCreation;
+import fr.efrei.documentapi.service.FileManipulationService;
+import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.http.HttpHeaders;
 
+import java.util.Optional;
+
 @RestController
 public class FileManipulationController {
     private final FileManipulationService fileManipulationService;
@@ -20,9 +24,16 @@ public class FileManipulationController {
         this.fileManipulationService = fileManipulationService;
     }
 
-    @PostMapping(path="/uploadFile", consumes = {"multipart/form-data"})
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
-        String fileName = fileManipulationService.storeFile(file);
+    @PostMapping(
+            path="/uploadFile",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file,
+                                             @RequestParam("body") String body) {
+
+        // TODO replace with jwt info
+        Long studentId = 1L;
+
+        String fileName = fileManipulationService.storeFile(file, body, studentId);
 
         return ResponseEntity.ok().body(fileName + " correctly uploaded");
     }
@@ -34,15 +45,11 @@ public class FileManipulationController {
         return ResponseEntity.ok().body(fileName + " correctly deleted");
     }
 
-    @GetMapping("/file/{fileName}")
-    public ResponseEntity<Resource> getFile(@PathVariable String fileName) {
-        var resource = fileManipulationService.getFile(fileName);
+    @GetMapping("/file/{documentId}")
+    public ResponseEntity<Resource> getFile(@PathVariable Long documentId) {
+        var resource = fileManipulationService.getFile(documentId);
 
         String contentType = "application/octet-stream";
-
-        if (fileName.toLowerCase().endsWith(".pdf")) {
-            contentType = "application/pdf";
-        }
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
@@ -52,7 +59,11 @@ public class FileManipulationController {
 
     @GetMapping("/listFiles")
     public ResponseEntity<String> listFiles() throws JsonProcessingException {
-        var files = fileManipulationService.listAllFiles();
+        // TODO replace with jwt info
+        Long studentId = 1L;
+        String role = "ROLE_STUDENT";
+
+        var files = fileManipulationService.listAllFiles(studentId, role);
 
         ObjectMapper mapper = new ObjectMapper();
         String filesStr = mapper.writeValueAsString(files);
