@@ -13,10 +13,8 @@ import java.util.List;
 @Table(name = "Student")
 public class Student {
     @Id
-    @GeneratedValue
     @Column(name = "student_id")
     private Long studentID;
-
 
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
     private List<Document> documents;

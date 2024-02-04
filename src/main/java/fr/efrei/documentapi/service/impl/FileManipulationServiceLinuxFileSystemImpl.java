@@ -5,6 +5,7 @@ import fr.efrei.documentapi.configuration.properties.FileStorageProperties;
 import fr.efrei.documentapi.exception.FileStorageException;
 import fr.efrei.documentapi.model.Document;
 import fr.efrei.documentapi.model.dto.DocumentCreation;
+import fr.efrei.documentapi.model.dto.DocumentResponse;
 import fr.efrei.documentapi.service.DocumentService;
 import fr.efrei.documentapi.service.FileManipulationService;
 import org.springframework.core.io.Resource;
@@ -40,7 +41,7 @@ public class FileManipulationServiceLinuxFileSystemImpl implements FileManipulat
 
 
     @Override
-    public List<Document> listAllFiles(Long studentId, String role) {
+    public List<DocumentResponse> listAllFiles(Long studentId, String role) {
         return switch (role) {
             case "ROLE_STUDENT" -> documentService.getAllDocumentsByStudentId(studentId);
             case "ROLE_TUTOR" -> documentService.getAllDocuments();
@@ -112,25 +113,26 @@ public class FileManipulationServiceLinuxFileSystemImpl implements FileManipulat
         }
     }
 
-    public String deleteFile(String fileName) {
-        if (fileName == null){
+    public void deleteFile(Long documentId, Long studentId) {
+        if (documentId == null){
             throw new FileStorageException("Désolé ! le nom du fichier est nul");
         }
 
+        documentService.deleteDocument(documentId, studentId);
+
         try {
-            Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
+            Path filePath = this.fileStorageLocation.resolve(documentId.toString()).normalize();
 
             if(!doesFileExist(filePath)) {
                 throw new ResponseStatusException(
                         org.springframework.http.HttpStatus.NOT_FOUND, "Fichier non trouvé",
-                        new FileStorageException("Désolé! Le fichier n'existe pas : " + fileName));
+                        new FileStorageException("Désolé! Le fichier n'existe pas : " + documentId));
             }
 
             Files.delete(filePath);
 
-            return fileName;
         } catch (IOException ex) {
-            throw new FileStorageException("Impossible de stocker le fichier " + fileName + ". Veuillez réessayer!", ex);
+            throw new FileStorageException("Impossible de stocker le fichier " + documentId + ". Veuillez réessayer!", ex);
         }
     }
 
