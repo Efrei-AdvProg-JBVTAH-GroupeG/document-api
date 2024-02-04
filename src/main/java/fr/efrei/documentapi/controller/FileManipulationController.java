@@ -2,11 +2,15 @@ package fr.efrei.documentapi.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.efrei.documentapi.security.user.UserDetailsImpl;
+import fr.efrei.documentapi.service.FileManipulationService;
 import fr.efrei.documentapi.model.dto.DocumentCreation;
 import fr.efrei.documentapi.service.FileManipulationService;
 import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.http.ResponseEntity;
 import org.springframework.core.io.Resource;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.MediaType;

@@ -1,11 +1,10 @@
 package fr.efrei.documentapi.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.efrei.documentapi.configuration.FileStorageProperties;
+import fr.efrei.documentapi.configuration.properties.FileStorageProperties;
 import fr.efrei.documentapi.exception.FileStorageException;
 import fr.efrei.documentapi.model.Document;
 import fr.efrei.documentapi.model.dto.DocumentCreation;
-import fr.efrei.documentapi.model.dto.DocumentResponse;
 import fr.efrei.documentapi.service.DocumentService;
 import fr.efrei.documentapi.service.FileManipulationService;
 import org.springframework.core.io.Resource;
@@ -18,8 +17,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class FileManipulationServiceLinuxFileSystemImpl implements FileManipulationService {

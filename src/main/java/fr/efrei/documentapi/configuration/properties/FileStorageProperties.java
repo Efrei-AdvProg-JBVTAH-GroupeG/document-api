@@ -1,4 +1,4 @@
-package fr.efrei.documentapi.configuration;
+package fr.efrei.documentapi.configuration.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
