@@ -5,6 +5,7 @@ import fr.efrei.documentapi.exception.TutorException;
 import fr.efrei.documentapi.model.Document;
 import fr.efrei.documentapi.model.Student;
 import fr.efrei.documentapi.model.dto.DocumentCreation;
+import fr.efrei.documentapi.model.dto.DocumentResponse;
 import fr.efrei.documentapi.repository.DocumentRepository;
 import fr.efrei.documentapi.repository.StudentRepository;
 import fr.efrei.documentapi.service.DocumentService;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class DocumentServiceImpl implements DocumentService {
@@ -44,16 +46,28 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public List<Document> getAllDocumentsByStudentId(Long studentId) {
+    public List<DocumentResponse> getAllDocumentsByStudentId(Long studentId) {
         Student student = studentService.findOrCreateStudent(studentId);
+        List<DocumentResponse> documents = new ArrayList<>();
+        documentRepository.findAllByStudent(student).forEach(document ->
+                documents.add(new DocumentResponse(
+                    document.getId(),
+                    document.getName(),
+                    document.getType(),
+                    document.getSubmitionDate())));
 
-        return documentRepository.findAllByStudent(student);
+        return documents;
     }
 
     @Override
-    public List<Document> getAllDocuments() {
-        List<Document> documents = new ArrayList<>();
-        documentRepository.findAll().forEach(documents::add);
+    public List<DocumentResponse> getAllDocuments() {
+        List<DocumentResponse> documents = new ArrayList<>();
+        documentRepository.findAll().forEach(document ->
+                documents.add(new DocumentResponse(
+                    document.getId(),
+                    document.getName(),
+                    document.getType(),
+                    document.getSubmitionDate())));
         return documents;
     }
 
@@ -61,5 +75,19 @@ public class DocumentServiceImpl implements DocumentService {
     public Document getDocumentById(Long documentId) {
         return documentRepository.findById(documentId)
                 .orElseThrow(() -> new DocumentException("Document not found"));
+    }
+
+    @Override
+    public void deleteDocument(Long documentId, Long studentId) {
+
+        Document documentToDelete = documentRepository.findById(documentId)
+                .orElseThrow(() -> new DocumentException("Le document n'existe pas"));
+
+
+        if(!Objects.equals(documentToDelete.getStudent().getStudentID(), studentId)){
+            throw new TutorException("Vous n'êtes pas autorisé à supprimer ce document");
+        }
+
+        documentRepository.deleteById(documentId);
     }
 }

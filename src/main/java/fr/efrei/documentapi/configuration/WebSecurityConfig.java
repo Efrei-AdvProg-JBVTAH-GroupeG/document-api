@@ -39,16 +39,20 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((auth) ->
                     auth
                             .requestMatchers(
-                                    "/deleteFile/",
-                                    "/file/",
+                                    "/file/*",
                                     "/listFiles"
                             ).authenticated()
                             .requestMatchers(
                                     HttpMethod.POST,
                                     "/uploadFile"
                             ).hasRole("STUDENT")
+                            .requestMatchers(
+                                    HttpMethod.DELETE,
+                                    "/deleteFile/*"
+                            ).hasRole("STUDENT")
                 )
                 .cors(Customizer.withDefaults())
+                //csrf protection not needed as token base application
                 .csrf(AbstractHttpConfigurer::disable);
 
         return http.build();
