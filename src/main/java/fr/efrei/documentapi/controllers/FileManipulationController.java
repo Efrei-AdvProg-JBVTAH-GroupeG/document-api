@@ -48,7 +48,6 @@ public class FileManipulationController {
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
-
     }
 
     @GetMapping("/listFiles")

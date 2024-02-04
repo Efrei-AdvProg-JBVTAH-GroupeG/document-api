@@ -1,7 +1,8 @@
-package fr.efrei.documentapi.services;
+package fr.efrei.documentapi.services.impl;
 
 import fr.efrei.documentapi.configurations.FileStorageProperties;
 import fr.efrei.documentapi.exceptions.FileStorageException;
+import fr.efrei.documentapi.services.FileManipulationService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class FileManipulationServiceImpl implements FileManipulationService{
+public class FileManipulationServiceImpl implements FileManipulationService {
     private final Path fileStorageLocation;
 
 
