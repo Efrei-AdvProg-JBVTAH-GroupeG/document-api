@@ -4,7 +4,7 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Data
-@ConfigurationProperties(prefix = "file")
+@ConfigurationProperties(prefix = "document")
 public class FileStorageProperties {
     private String uploadDir;
 }
