@@ -5,6 +5,7 @@ import fr.efrei.documentapi.service.TokenService;
 import fr.efrei.documentapi.service.impl.JwtTokenServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -38,8 +39,14 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((auth) ->
                     auth
                             .requestMatchers(
-                                    "/test"
+                                    "/deleteFile/",
+                                    "/file/",
+                                    "/listFiles"
                             ).authenticated()
+                            .requestMatchers(
+                                    HttpMethod.POST,
+                                    "/uploadFile"
+                            ).hasRole("STUDENT")
                 )
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable);
