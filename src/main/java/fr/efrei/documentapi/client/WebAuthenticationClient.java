@@ -4,5 +4,5 @@ import fr.efrei.documentapi.model.AuthKey;
 import reactor.core.publisher.Mono;
 
 public interface WebAuthenticationClient {
-    public Mono<AuthKey> getPublicKey();
+    Mono<AuthKey> getPublicKey();
 }

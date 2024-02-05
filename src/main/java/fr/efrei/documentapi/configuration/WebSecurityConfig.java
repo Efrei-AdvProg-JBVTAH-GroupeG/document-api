@@ -17,14 +17,13 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 @EnableMethodSecurity(
         prePostEnabled = true
 )
 public class WebSecurityConfig {
-    private TokenService tokenService;
+    private final TokenService tokenService;
 
     public WebSecurityConfig(
             JwtTokenServiceImpl tokenService

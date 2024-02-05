@@ -11,9 +11,9 @@ import reactor.core.publisher.Mono;
 @Service
 public class WebAuthenticationClientImpl implements WebAuthenticationClient {
 
-    private WebClient authenticationWebClient;
+    private final WebClient authenticationWebClient;
 
-    private WebAuthenticationProperties webAuthenticationProperties;
+    private final WebAuthenticationProperties webAuthenticationProperties;
 
     public WebAuthenticationClientImpl(
             @Qualifier("authenticationClient") WebClient webClient,

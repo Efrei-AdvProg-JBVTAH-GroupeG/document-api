@@ -18,7 +18,7 @@ import java.security.spec.InvalidKeySpecException;
 
 public class AuthTokenFilter extends OncePerRequestFilter {
 
-    private TokenService tokenService;
+    private final TokenService tokenService;
 
     public AuthTokenFilter(
             TokenService tokenService
